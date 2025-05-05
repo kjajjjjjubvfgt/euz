@@ -3,6 +3,7 @@ export interface LoginCredentials {
   server: string;
   username: string;
   password: string;
+  rememberMe?: boolean;
 }
 
 export interface UserProfile {
@@ -19,6 +20,23 @@ export interface Category {
   category_id: string;
   category_name: string;
   parent_id?: number;
+}
+
+export type LiveCategory = Category;
+export type MovieCategory = Category;
+export type SeriesCategory = Category;
+
+export interface Channel {
+  stream_id: number;
+  name: string;
+  stream_icon: string;
+  epg_channel_id?: string;
+  added?: string;
+  category_id: string;
+  custom_sid?: string;
+  tv_archive?: 0 | 1;
+  direct_source?: string;
+  tv_archive_duration?: number;
 }
 
 export interface LiveStream {
@@ -43,6 +61,11 @@ export interface Movie {
   container_extension: string;
   custom_sid?: string;
   direct_source?: string;
+  cover?: string;
+  year?: string;
+  genre?: string;
+  plot?: string;
+  rating?: string;
 }
 
 export interface Series {

@@ -1,61 +1,37 @@
-# Netflix-Style IPTV OTT App for Samsung Tizen TV
+# IPTV OTT App for Samsung Tizen TV
 
-A modern, feature-rich IPTV OTT (Over-the-top) application for Samsung Tizen smart TVs, designed with a Netflix-like user interface and smooth animations.
+A Netflix-style IPTV OTT (Over-the-top) application for Samsung Tizen smart TVs. This application provides a modern, animated interface for accessing live TV, movies, and series content in a single platform.
 
 ## Features
 
-- **Modern UI**: Netflix-inspired interface with smooth animations and transitions
-- **Content Types**: Live TV, Movies, and Series in a single platform
-- **Xtream Codes Integration**: Full support for Xtream Codes panel API
-- **EPG Support**: Electronic Program Guide for live TV channels
+- **Modern UI**: Netflix-like interface with smooth animations and transitions
+- **Content Types**: Live TV, Movies, and Series in a unified platform
+- **Xtream Codes Support**: Connect to IPTV services using Xtream Codes panel
 - **TMDB Integration**: Rich metadata for movies and series
-- **Multi-language Support**: Turkish and English interfaces
+- **EPG Support**: Electronic Program Guide for live TV channels
+- **Advanced Video Player**: Support for various formats, DRM, and subtitles
+- **Multilingual**: Turkish and English language support
 - **Theme Options**: Light and dark mode
 - **User Features**: Favorites, watch history, parental controls
-- **Advanced Video Player**: Support for various formats with DRM capabilities
-- **TV-Optimized**: Designed specifically for big screen and remote control navigation
+- **Search**: Find content across all categories
 
-## Tech Stack
+## Technical Details
 
-- **React**: UI library
-- **TypeScript**: Type safety
-- **Styled Components**: Styling
-- **React Router**: Navigation
-- **Zustand**: State management
-- **i18next**: Internationalization
-- **Axios**: API requests
-- **Shaka Player**: Video playback with DRM support
-- **Vite**: Build tool
+- Built with React, TypeScript, and Vite
+- State management with Zustand
+- Video playback with Shaka Player
+- Internationalization with i18next
+- Focus management for TV remote control
+- Responsive design for TV screens
 
-## Project Structure
-
-```
-src/
-├── assets/           # Static assets
-├── components/       # UI components
-│   ├── content/      # Content-specific components
-│   ├── layout/       # Layout components
-│   └── ui/           # Reusable UI components
-├── hooks/            # Custom React hooks
-├── i18n/             # Internationalization
-├── pages/            # Application pages
-├── providers/        # Context providers
-├── services/         # API services
-├── store/            # State management
-├── styles/           # Global styles and themes
-├── types/            # TypeScript type definitions
-└── utils/            # Utility functions
-```
-
-## Development Setup
+## Installation
 
 ### Prerequisites
 
-- Node.js (v16+)
-- npm or yarn
-- Tizen Studio (for TV deployment)
+- Tizen Studio with TV extension
+- Samsung TV Certificate for signing
 
-### Installation
+### Development Setup
 
 1. Clone the repository:
    ```
@@ -68,17 +44,12 @@ src/
    npm install
    ```
 
-3. Start the development server:
+3. Start development server:
    ```
    npm run dev
    ```
 
-4. Build for production:
-   ```
-   npm run build
-   ```
-
-### Tizen Deployment
+### Building for Tizen TV
 
 1. Build the project:
    ```
@@ -87,31 +58,48 @@ src/
 
 2. Package for Tizen:
    ```
-   npm run tizen:build
-   npm run tizen:package
+   npm run package
    ```
 
 3. Install on TV or emulator:
    ```
-   npm run tizen:install
-   npm run tizen:run
-   ```
-
-4. Or run all steps at once:
-   ```
-   npm run tizen:all
+   npm run install-tv
    ```
 
 ## Configuration
 
-### TMDB API
+The application requires Xtream Codes panel credentials (server URL, username, password) for accessing IPTV content. These are entered by the user on the login screen.
 
-The application uses TMDB API for movie and series metadata. The API key is already configured in the application.
+For TMDB integration, the application uses the following API credentials:
+- API Key: 42125c682636b68d10d70b487c692685
+- Read Access Token: eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0MjEyNWM2ODI2MzZiNjhkMTBkNzBiNDg3YzY5MjY4NSIsIm5iZiI6MS42NDM4MjA2NjA2OTUwMDAyZSs5LCJzdWIiOiI2MWZhYjY3NGI3YWJiNTAwNjY1YWQ4MzAiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.e06dzH5trScMiz7obFbCFip5dO1XQp-bUC3lecJ8sxU
 
-### Xtream Codes
+## Project Structure
 
-The application supports Xtream Codes panel API. Users need to enter their server URL, username, and password on the login screen.
+```
+tizen-iptv-app/
+├── src/
+│   ├── api/           # API services for Xtream Codes and TMDB
+│   ├── assets/        # Static assets
+│   ├── components/    # UI components
+│   ├── hooks/         # Custom React hooks
+│   ├── i18n/          # Internationalization
+│   ├── pages/         # Application pages
+│   ├── providers/     # Context providers
+│   ├── stores/        # Zustand stores
+│   ├── types/         # TypeScript type definitions
+│   ├── utils/         # Utility functions
+│   ├── App.tsx        # Main application component
+│   └── main.tsx       # Application entry point
+├── public/            # Public assets
+├── config.xml         # Tizen application configuration
+└── package.json       # Project dependencies and scripts
+```
+
+## Deployment
+
+The application can be deployed to Samsung Tizen TVs through the Tizen Studio or using the provided npm scripts. The built application is packaged as a .wgt file that can be installed on compatible TVs.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is proprietary and not licensed for public use without permission.

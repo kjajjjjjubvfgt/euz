@@ -1,0 +1,119 @@
+{
+  "app": {
+    "name": "IPTV OTT",
+    "slogan": "Tüm içerikler tek yerde"
+  },
+  "auth": {
+    "login": "Giriş Yap",
+    "logout": "Çıkış Yap",
+    "server": "Sunucu Adresi",
+    "username": "Kullanıcı Adı",
+    "password": "Şifre",
+    "rememberMe": "Beni Hatırla",
+    "loginFailed": "Giriş başarısız, lütfen bilgilerinizi kontrol edin",
+    "loggingIn": "Giriş yapılıyor...",
+    "serverPlaceholder": "http://sunucu.com:port",
+    "usernamePlaceholder": "Kullanıcı adınızı girin",
+    "passwordPlaceholder": "Şifrenizi girin"
+  },
+  "navigation": {
+    "home": "Ana Sayfa",
+    "liveTV": "Canlı TV",
+    "movies": "Filmler",
+    "series": "Diziler",
+    "favorites": "Favoriler",
+    "settings": "Ayarlar",
+    "profile": "Profil",
+    "search": "Ara"
+  },
+  "categories": {
+    "all": "Tümü",
+    "featured": "Öne Çıkanlar",
+    "recentlyAdded": "Yeni Eklenenler",
+    "continueWatching": "İzlemeye Devam Et"
+  },
+  "player": {
+    "play": "Oynat",
+    "pause": "Duraklat",
+    "back": "Geri",
+    "forward": "İleri",
+    "subtitles": "Altyazılar",
+    "audio": "Ses",
+    "quality": "Kalite",
+    "noSubtitles": "Altyazı yok",
+    "loading": "Yükleniyor...",
+    "error": "Oynatma hatası",
+    "retry": "Tekrar Dene",
+    "watchTrailer": "Fragmanı İzle"
+  },
+  "content": {
+    "cast": "Oyuncular",
+    "director": "Yönetmen",
+    "genre": "Tür",
+    "releaseDate": "Yayın Tarihi",
+    "duration": "Süre",
+    "rating": "Puan",
+    "season": "Sezon",
+    "episode": "Bölüm",
+    "seasons": "Sezonlar",
+    "episodes": "Bölümler",
+    "similar": "Benzer İçerikler",
+    "addToFavorites": "Favorilere Ekle",
+    "removeFromFavorites": "Favorilerden Çıkar",
+    "nowPlaying": "Şu an:",
+    "next": "Sonraki:",
+    "noDescription": "Açıklama bulunmuyor",
+    "noEpgData": "Program bilgisi mevcut değil"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "theme": "Tema",
+    "light": "Açık",
+    "dark": "Koyu",
+    "language": "Dil",
+    "turkish": "Türkçe",
+    "english": "İngilizce",
+    "autoLogin": "Otomatik Giriş",
+    "parentalControl": "Ebeveyn Kontrolü",
+    "setPin": "PIN Belirle",
+    "enterPin": "PIN Girin",
+    "confirmPin": "PIN'i Doğrulayın",
+    "pinMismatch": "PIN'ler eşleşmiyor",
+    "about": "Hakkında",
+    "version": "Versiyon",
+    "clearData": "Verileri Temizle",
+    "clearDataConfirm": "Tüm kullanıcı verilerini silmek istediğinizden emin misiniz?"
+  },
+  "profile": {
+    "title": "Profil",
+    "username": "Kullanıcı Adı",
+    "status": "Durum",
+    "expiration": "Bitiş Tarihi",
+    "connections": "Bağlantılar",
+    "active": "Aktif",
+    "expired": "Süresi Dolmuş",
+    "maxConnections": "Maksimum Bağlantı",
+    "activeConnections": "Aktif Bağlantı",
+    "deviceInfo": "Cihaz Bilgisi"
+  },
+  "errors": {
+    "networkError": "İnternet bağlantısı kurulamadı. Lütfen bağlantınızı kontrol edin.",
+    "contentError": "İçerik yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+    "authError": "Oturum süresi doldu. Lütfen tekrar giriş yapın.",
+    "streamError": "Yayın alınamadı, lütfen daha sonra tekrar deneyin.",
+    "unknownError": "Bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+  },
+  "common": {
+    "loading": "Yükleniyor...",
+    "retry": "Tekrar Dene",
+    "cancel": "İptal",
+    "confirm": "Onayla",
+    "save": "Kaydet",
+    "delete": "Sil",
+    "search": "Ara...",
+    "noResults": "Sonuç bulunamadı",
+    "back": "Geri",
+    "continue": "Devam Et",
+    "seeAll": "Tümünü Gör"
+  }
+}

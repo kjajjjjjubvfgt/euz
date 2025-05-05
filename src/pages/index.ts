@@ -1,0 +1,10 @@
+export { default as LoginPage } from './LoginPage';
+export { default as HomePage } from './HomePage';
+export { default as LiveTVPage } from './LiveTVPage';
+export { default as MoviesPage } from './MoviesPage';
+export { default as SeriesPage } from './SeriesPage';
+export { default as MovieDetailPage } from './MovieDetailPage';
+export { default as SeriesDetailPage } from './SeriesDetailPage';
+export { default as LiveTVPlayerPage } from './LiveTVPlayerPage';
+export { default as SettingsPage } from './SettingsPage';
+export { default as SearchPage } from './SearchPage';

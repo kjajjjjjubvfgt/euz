@@ -1,0 +1,119 @@
+{
+  "app": {
+    "name": "IPTV OTT",
+    "slogan": "All content in one place"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "server": "Server Address",
+    "username": "Username",
+    "password": "Password",
+    "rememberMe": "Remember Me",
+    "loginFailed": "Login failed, please check your credentials",
+    "loggingIn": "Logging in...",
+    "serverPlaceholder": "http://server.com:port",
+    "usernamePlaceholder": "Enter your username",
+    "passwordPlaceholder": "Enter your password"
+  },
+  "navigation": {
+    "home": "Home",
+    "liveTV": "Live TV",
+    "movies": "Movies",
+    "series": "Series",
+    "favorites": "Favorites",
+    "settings": "Settings",
+    "profile": "Profile",
+    "search": "Search"
+  },
+  "categories": {
+    "all": "All",
+    "featured": "Featured",
+    "recentlyAdded": "Recently Added",
+    "continueWatching": "Continue Watching"
+  },
+  "player": {
+    "play": "Play",
+    "pause": "Pause",
+    "back": "Back",
+    "forward": "Forward",
+    "subtitles": "Subtitles",
+    "audio": "Audio",
+    "quality": "Quality",
+    "noSubtitles": "No subtitles",
+    "loading": "Loading...",
+    "error": "Playback error",
+    "retry": "Retry",
+    "watchTrailer": "Watch Trailer"
+  },
+  "content": {
+    "cast": "Cast",
+    "director": "Director",
+    "genre": "Genre",
+    "releaseDate": "Release Date",
+    "duration": "Duration",
+    "rating": "Rating",
+    "season": "Season",
+    "episode": "Episode",
+    "seasons": "Seasons",
+    "episodes": "Episodes",
+    "similar": "Similar Content",
+    "addToFavorites": "Add to Favorites",
+    "removeFromFavorites": "Remove from Favorites",
+    "nowPlaying": "Now Playing:",
+    "next": "Next:",
+    "noDescription": "No description available",
+    "noEpgData": "No program information available"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "language": "Language",
+    "turkish": "Turkish",
+    "english": "English",
+    "autoLogin": "Auto Login",
+    "parentalControl": "Parental Control",
+    "setPin": "Set PIN",
+    "enterPin": "Enter PIN",
+    "confirmPin": "Confirm PIN",
+    "pinMismatch": "PINs do not match",
+    "about": "About",
+    "version": "Version",
+    "clearData": "Clear Data",
+    "clearDataConfirm": "Are you sure you want to clear all user data?"
+  },
+  "profile": {
+    "title": "Profile",
+    "username": "Username",
+    "status": "Status",
+    "expiration": "Expiration Date",
+    "connections": "Connections",
+    "active": "Active",
+    "expired": "Expired",
+    "maxConnections": "Maximum Connections",
+    "activeConnections": "Active Connections",
+    "deviceInfo": "Device Info"
+  },
+  "errors": {
+    "networkError": "Internet connection could not be established. Please check your connection.",
+    "contentError": "Content could not be loaded. Please try again later.",
+    "authError": "Session expired. Please login again.",
+    "streamError": "Stream could not be loaded, please try again later.",
+    "unknownError": "An error occurred. Please try again later."
+  },
+  "common": {
+    "loading": "Loading...",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "search": "Search...",
+    "noResults": "No results found",
+    "back": "Back",
+    "continue": "Continue",
+    "seeAll": "See All"
+  }
+}

@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+// @ts-ignore
 import shaka from 'shaka-player';
 import { useUserDataStore } from '../store';
 
@@ -148,7 +149,10 @@ export const usePlayer = (options: PlayerOptions = {}) => {
             completed: false
           };
           
-          addToWatchHistory(historyItem);
+          addToWatchHistory({
+            ...historyItem,
+            name: 'Unknown' // Adding required name property
+          });
         }
       }
     };
@@ -179,7 +183,10 @@ export const usePlayer = (options: PlayerOptions = {}) => {
           completed: true
         };
         
-        addToWatchHistory(historyItem);
+        addToWatchHistory({
+          ...historyItem,
+          name: 'Unknown' // Adding required name property
+        });
       }
       
       if (onEnded) onEnded();

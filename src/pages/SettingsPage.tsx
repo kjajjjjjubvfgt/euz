@@ -26,7 +26,7 @@ const SettingsPage: React.FC = () => {
   
   // Handle language change
   const handleLanguageChange = (newLanguage: string) => {
-    setLanguage(newLanguage);
+    setLanguage(newLanguage as 'tr' | 'en');
     i18n.changeLanguage(newLanguage);
   };
   
@@ -103,7 +103,7 @@ const SettingsPage: React.FC = () => {
                 <Switch>
                   <SwitchInput 
                     type="checkbox" 
-                    checked={parentalControl} 
+                    checked={parentalControl.enabled} 
                     onChange={handleParentalControlToggle} 
                     id="parental-control"
                   />

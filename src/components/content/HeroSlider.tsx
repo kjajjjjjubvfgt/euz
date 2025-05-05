@@ -77,7 +77,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({
       navigate(`/series/${item.series_id}`);
     } else if ('stream_type' in item) {
       // It's a channel
-      navigate(`/live/${item.stream_id}`);
+      navigate(`/live/${(item as any).stream_id}`);
     }
   };
   
@@ -92,7 +92,7 @@ const HeroSlider: React.FC<HeroSliderProps> = ({
       navigate(`/series/${item.series_id}/details`);
     } else if ('stream_type' in item) {
       // It's a channel
-      navigate(`/live/${item.stream_id}/details`);
+      navigate(`/live/${(item as any).stream_id}/details`);
     }
   };
   

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TMDBMovie, TMDBSeries, TMDBCast } from '../types';
+import { TMDBMovie, TMDBSeries, TMDBCast, TmdbMovieDetails, TmdbSeriesDetails } from '../types';
 
 class TMDBService {
   private readonly API_KEY = '42125c682636b68d10d70b487c692685';
@@ -22,15 +22,19 @@ class TMDBService {
   }
 
   // Search for movies
-  public async searchMovies(query: string, language: string = 'tr-TR'): Promise<TMDBMovie[]> {
+  public async searchMovies(query: string, year?: string, language: string = 'tr-TR'): Promise<TMDBMovie[]> {
     try {
-      const response = await this.api.get('/search/movie', {
-        params: {
-          query,
-          language,
-          include_adult: false,
-        },
-      });
+      const params: any = {
+        query,
+        language,
+        include_adult: false,
+      };
+      
+      if (year) {
+        params.year = year;
+      }
+      
+      const response = await this.api.get('/search/movie', { params });
       return response.data.results;
     } catch (error) {
       console.error('TMDB search movies error:', error);
@@ -38,25 +42,34 @@ class TMDBService {
     }
   }
 
-  // Search for TV shows
-  public async searchTVShows(query: string, language: string = 'tr-TR'): Promise<TMDBSeries[]> {
+  // Search for TV shows/series
+  public async searchSeries(query: string, year?: string, language: string = 'tr-TR'): Promise<TMDBSeries[]> {
     try {
-      const response = await this.api.get('/search/tv', {
-        params: {
-          query,
-          language,
-          include_adult: false,
-        },
-      });
+      const params: any = {
+        query,
+        language,
+        include_adult: false,
+      };
+      
+      if (year) {
+        params.first_air_date_year = year;
+      }
+      
+      const response = await this.api.get('/search/tv', { params });
       return response.data.results;
     } catch (error) {
       console.error('TMDB search TV shows error:', error);
       throw new Error('Failed to search for TV shows.');
     }
   }
+  
+  // Alias for backward compatibility
+  public async searchTVShows(query: string, year?: string, language: string = 'tr-TR'): Promise<TMDBSeries[]> {
+    return this.searchSeries(query, year, language);
+  }
 
   // Get movie details
-  public async getMovieDetails(movieId: number, language: string = 'tr-TR'): Promise<TMDBMovie> {
+  public async getMovieDetails(movieId: number, language: string = 'tr-TR'): Promise<TmdbMovieDetails> {
     try {
       const response = await this.api.get(`/movie/${movieId}`, {
         params: {
@@ -71,10 +84,10 @@ class TMDBService {
     }
   }
 
-  // Get TV show details
-  public async getTVShowDetails(tvId: number, language: string = 'tr-TR'): Promise<TMDBSeries> {
+  // Get TV show/series details
+  public async getSeriesDetails(seriesId: number, language: string = 'tr-TR'): Promise<TmdbSeriesDetails> {
     try {
-      const response = await this.api.get(`/tv/${tvId}`, {
+      const response = await this.api.get(`/tv/${seriesId}`, {
         params: {
           language,
           append_to_response: 'credits,videos,external_ids',
@@ -85,6 +98,11 @@ class TMDBService {
       console.error('TMDB get TV show details error:', error);
       throw new Error('Failed to get TV show details.');
     }
+  }
+  
+  // Alias for backward compatibility
+  public async getTVShowDetails(tvId: number, language: string = 'tr-TR'): Promise<TmdbSeriesDetails> {
+    return this.getSeriesDetails(tvId, language);
   }
 
   // Get movie cast
@@ -116,6 +134,11 @@ class TMDBService {
       throw new Error('Failed to get TV show cast.');
     }
   }
+  
+  // Alias for backward compatibility
+  public async getSeriesCast(seriesId: number, language: string = 'tr-TR'): Promise<TMDBCast[]> {
+    return this.getTVShowCast(seriesId, language);
+  }
 
   // Get movie videos (trailers)
   public async getMovieVideos(movieId: number, language: string = 'tr-TR'): Promise<any[]> {
@@ -146,6 +169,11 @@ class TMDBService {
       throw new Error('Failed to get TV show videos.');
     }
   }
+  
+  // Alias for backward compatibility
+  public async getSeriesVideos(seriesId: number, language: string = 'tr-TR'): Promise<any[]> {
+    return this.getTVShowVideos(seriesId, language);
+  }
 
   // Get similar movies
   public async getSimilarMovies(movieId: number, language: string = 'tr-TR'): Promise<TMDBMovie[]> {
@@ -162,10 +190,10 @@ class TMDBService {
     }
   }
 
-  // Get similar TV shows
-  public async getSimilarTVShows(tvId: number, language: string = 'tr-TR'): Promise<TMDBSeries[]> {
+  // Get similar TV shows/series
+  public async getSimilarSeries(seriesId: number, language: string = 'tr-TR'): Promise<TMDBSeries[]> {
     try {
-      const response = await this.api.get(`/tv/${tvId}/similar`, {
+      const response = await this.api.get(`/tv/${seriesId}/similar`, {
         params: {
           language,
         },
@@ -174,6 +202,70 @@ class TMDBService {
     } catch (error) {
       console.error('TMDB get similar TV shows error:', error);
       throw new Error('Failed to get similar TV shows.');
+    }
+  }
+  
+  // Alias for backward compatibility
+  public async getSimilarTVShows(tvId: number, language: string = 'tr-TR'): Promise<TMDBSeries[]> {
+    return this.getSimilarSeries(tvId, language);
+  }
+  
+  // Get movie by ID (useful when we already know the TMDB ID)
+  public async getMovieById(movieId: number, language: string = 'tr-TR'): Promise<TMDBMovie> {
+    try {
+      const response = await this.api.get(`/movie/${movieId}`, {
+        params: {
+          language,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('TMDB get movie by ID error:', error);
+      throw new Error('Failed to get movie by ID.');
+    }
+  }
+  
+  // Get series by ID (useful when we already know the TMDB ID)
+  public async getSeriesById(seriesId: number, language: string = 'tr-TR'): Promise<TMDBSeries> {
+    try {
+      const response = await this.api.get(`/tv/${seriesId}`, {
+        params: {
+          language,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('TMDB get series by ID error:', error);
+      throw new Error('Failed to get series by ID.');
+    }
+  }
+  
+  // Get trending content
+  public async getTrendingMovies(timeWindow: 'day' | 'week' = 'week', language: string = 'tr-TR'): Promise<TMDBMovie[]> {
+    try {
+      const response = await this.api.get(`/trending/movie/${timeWindow}`, {
+        params: {
+          language,
+        },
+      });
+      return response.data.results;
+    } catch (error) {
+      console.error('TMDB get trending movies error:', error);
+      throw new Error('Failed to get trending movies.');
+    }
+  }
+  
+  public async getTrendingSeries(timeWindow: 'day' | 'week' = 'week', language: string = 'tr-TR'): Promise<TMDBSeries[]> {
+    try {
+      const response = await this.api.get(`/trending/tv/${timeWindow}`, {
+        params: {
+          language,
+        },
+      });
+      return response.data.results;
+    } catch (error) {
+      console.error('TMDB get trending series error:', error);
+      throw new Error('Failed to get trending series.');
     }
   }
 }

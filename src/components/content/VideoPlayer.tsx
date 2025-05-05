@@ -40,7 +40,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const { t } = useTranslation();
   const [showControls, setShowControls] = useState(true);
-  const [controlsTimeout, setControlsTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [controlsTimeout, setControlsTimeout] = useState<number | null>(null);
   
   const {
     videoRef,
@@ -105,7 +105,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         }
       }, 5000);
       
-      setControlsTimeout(timeout);
+      setControlsTimeout(timeout as unknown as number);
     }
     
     return () => {

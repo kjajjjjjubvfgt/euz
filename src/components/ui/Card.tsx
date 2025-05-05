@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { useFocusable } from '../../hooks';
 
 interface CardProps {
-  children: React.ReactNode;
+  children?: React.ReactNode; // Making children optional
   onClick?: () => void;
   width?: string;
   height?: string;

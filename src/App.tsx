@@ -36,7 +36,9 @@ const App: React.FC = () => {
     initializeSettings();
     
     // Try auto login if credentials are stored
-    autoLogin();
+    if (typeof autoLogin === 'function') {
+      autoLogin();
+    }
   }, []);
   
   return (

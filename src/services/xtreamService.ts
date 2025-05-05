@@ -234,16 +234,143 @@ class XtreamService {
   }
 
   // Stream URL Generators
-  public getLiveStreamUrl(streamId: number): string {
-    return `${this.baseUrl}/live/${this.username}/${this.password}/${streamId}.ts`;
+  public getLiveStreamUrl(streamId: number, format: 'ts' | 'm3u8' = 'ts'): string {
+    return `${this.baseUrl}/live/${this.username}/${this.password}/${streamId}.${format}`;
   }
 
-  public getVodStreamUrl(vodId: number): string {
-    return `${this.baseUrl}/movie/${this.username}/${this.password}/${vodId}.mp4`;
+  public getMovieStreamUrl(vodId: number, format: 'mp4' | 'mkv' = 'mp4'): string {
+    return `${this.baseUrl}/movie/${this.username}/${this.password}/${vodId}.${format}`;
   }
 
-  public getSeriesStreamUrl(episodeId: number): string {
-    return `${this.baseUrl}/series/${this.username}/${this.password}/${episodeId}.mp4`;
+  public getEpisodeStreamUrl(episodeId: number, format: 'mp4' | 'mkv' = 'mp4'): string {
+    return `${this.baseUrl}/series/${this.username}/${this.password}/${episodeId}.${format}`;
+  }
+  
+  // Alias methods for backward compatibility
+  public getVodStreamUrl(vodId: number, format: 'mp4' | 'mkv' = 'mp4'): string {
+    return this.getMovieStreamUrl(vodId, format);
+  }
+
+  public getSeriesStreamUrl(episodeId: number, format: 'mp4' | 'mkv' = 'mp4'): string {
+    return this.getEpisodeStreamUrl(episodeId, format);
+  }
+  
+  // HLS Stream URLs
+  public getLiveHlsStreamUrl(streamId: number): string {
+    return this.getLiveStreamUrl(streamId, 'm3u8');
+  }
+  
+  // Get stream URL based on content type
+  public getStreamUrl(type: 'live' | 'movie' | 'series', id: number, format?: 'ts' | 'm3u8' | 'mp4' | 'mkv'): string {
+    switch (type) {
+      case 'live':
+        return this.getLiveStreamUrl(id, format as 'ts' | 'm3u8');
+      case 'movie':
+        return this.getMovieStreamUrl(id, format as 'mp4' | 'mkv');
+      case 'series':
+        return this.getEpisodeStreamUrl(id, format as 'mp4' | 'mkv');
+      default:
+        throw new Error(`Unknown content type: ${type}`);
+    }
+  }
+  
+  // Additional methods for series
+  public async getSeriesSeasons(seriesId: number): Promise<Season[]> {
+    try {
+      const seriesInfo = await this.getSeriesInfo(seriesId);
+      const seasonNumbers = Object.keys(seriesInfo.episodes).map(Number);
+      
+      return seasonNumbers.map(seasonNumber => ({
+        id: seasonNumber,
+        season_number: seasonNumber,
+        name: `Season ${seasonNumber}`,
+        series_id: seriesId,
+        air_date: '',
+        episode_count: seriesInfo.episodes[seasonNumber.toString()].length,
+        overview: '',
+        poster_path: seriesInfo.info.cover || ''
+      }));
+    } catch (error) {
+      console.error('Get series seasons error:', error);
+      throw new Error('Failed to get series seasons.');
+    }
+  }
+  
+  public async getSeriesEpisodes(seriesId: number, seasonNumber: number): Promise<Episode[]> {
+    try {
+      const seriesInfo = await this.getSeriesInfo(seriesId);
+      const seasonKey = seasonNumber.toString();
+      
+      if (!seriesInfo.episodes[seasonKey]) {
+        return [];
+      }
+      
+      // Sort episodes by episode number
+      return seriesInfo.episodes[seasonKey].sort((a, b) => {
+        const aNum = parseInt(a.episode_num.toString());
+        const bNum = parseInt(b.episode_num.toString());
+        return aNum - bNum;
+      });
+    } catch (error) {
+      console.error('Get series episodes error:', error);
+      throw new Error('Failed to get series episodes.');
+    }
+  }
+  
+  // Search methods
+  public async searchLiveStreams(query: string): Promise<LiveStream[]> {
+    try {
+      const allStreams = await this.getLiveStreams();
+      return allStreams.filter(stream => 
+        stream.name.toLowerCase().includes(query.toLowerCase())
+      );
+    } catch (error) {
+      console.error('Search live streams error:', error);
+      throw new Error('Failed to search live streams.');
+    }
+  }
+  
+  public async searchVodStreams(query: string): Promise<Movie[]> {
+    try {
+      const allMovies = await this.getVodStreams();
+      return allMovies.filter(movie => 
+        movie.name.toLowerCase().includes(query.toLowerCase())
+      );
+    } catch (error) {
+      console.error('Search VOD streams error:', error);
+      throw new Error('Failed to search movies.');
+    }
+  }
+  
+  public async searchSeries(query: string): Promise<Series[]> {
+    try {
+      const allSeries = await this.getSeries();
+      return allSeries.filter(series => 
+        series.name.toLowerCase().includes(query.toLowerCase())
+      );
+    } catch (error) {
+      console.error('Search series error:', error);
+      throw new Error('Failed to search series.');
+    }
+  }
+  
+  public async searchAll(query: string): Promise<{
+    liveStreams: LiveStream[];
+    movies: Movie[];
+    series: Series[];
+  }> {
+    try {
+      const [liveStreams, movies, series] = await Promise.all([
+        this.searchLiveStreams(query),
+        this.searchVodStreams(query),
+        this.searchSeries(query)
+      ]);
+      
+      return { liveStreams, movies, series };
+    } catch (error) {
+      console.error('Search all error:', error);
+      throw new Error('Failed to search content.');
+    }
   }
 
   // XMLTV EPG

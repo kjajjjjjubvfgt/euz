@@ -30,8 +30,8 @@ const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
   return (
     <TabsContainer>
       {tabs.map((tab) => {
-        const { ref, focused } = useFocusable({
-          onEnterPress: () => handleTabClick(tab.id),
+        const { ref, isFocused } = useFocusable({
+          onEnter: () => handleTabClick(tab.id),
         });
         
         const isActive = tab.id === selectedTab;
@@ -39,9 +39,9 @@ const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange }) => {
         return (
           <TabItem
             key={tab.id}
-            ref={ref}
+            ref={ref as React.RefObject<HTMLDivElement>}
             active={isActive}
-            focused={focused}
+            focused={isFocused}
             onClick={() => handleTabClick(tab.id)}
           >
             {tab.label}

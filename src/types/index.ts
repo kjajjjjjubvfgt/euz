@@ -37,6 +37,8 @@ export interface Channel {
   tv_archive?: 0 | 1;
   direct_source?: string;
   tv_archive_duration?: number;
+  epg_now?: EPGProgram;
+  epg_next?: EPGProgram;
 }
 
 export interface LiveStream {
@@ -50,6 +52,9 @@ export interface LiveStream {
   tv_archive?: 0 | 1;
   direct_source?: string;
   tv_archive_duration?: number;
+  epg_now?: EPGProgram;
+  epg_next?: EPGProgram;
+  stream_type?: string;
 }
 
 export interface Movie {
@@ -66,6 +71,13 @@ export interface Movie {
   genre?: string;
   plot?: string;
   rating?: string;
+  director?: string;
+  cast?: string;
+  duration?: string;
+  duration_secs?: number;
+  tmdb_id?: number;
+  backdrop_path?: string;
+  youtube_trailer?: string;
 }
 
 export interface Series {
@@ -84,6 +96,13 @@ export interface Series {
   youtube_trailer?: string;
   episode_run_time?: string;
   category_id: string;
+  year?: string;
+  tmdb_id?: number;
+  seasons?: number[];
+  num_seasons?: number;
+  status?: string;
+  country?: string;
+  network?: string;
 }
 
 export interface Season {
@@ -91,8 +110,11 @@ export interface Season {
   season_number: number;
   name: string;
   cover?: string;
+  poster_path?: string;
   overview?: string;
   air_date?: string;
+  episode_count?: number;
+  series_id?: number;
 }
 
 export interface Episode {
@@ -110,7 +132,15 @@ export interface Episode {
   };
   added?: string;
   season: number;
+  season_number: number; // Making this required
   direct_source?: string;
+  seasonNumber?: number;
+  still_path?: string;
+  overview?: string;
+  air_date?: string;
+  vote_average?: number;
+  episode_number?: number;
+  name?: string;
 }
 
 // EPG Types
@@ -161,13 +191,71 @@ export interface TMDBCast {
   profile_path: string;
 }
 
+export interface TmdbMovieDetails {
+  id: number;
+  title: string;
+  overview: string;
+  poster_path: string;
+  backdrop_path: string;
+  release_date: string;
+  vote_average: number;
+  genres: { id: number; name: string }[];
+  runtime: number;
+  imdb_id?: string;
+  credits?: {
+    cast: TMDBCast[];
+  };
+  videos?: {
+    results: {
+      id: string;
+      key: string;
+      name: string;
+      site: string;
+      type: string;
+    }[];
+  };
+}
+
+export interface TmdbSeriesDetails {
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string;
+  backdrop_path: string;
+  first_air_date: string;
+  vote_average: number;
+  genres: { id: number; name: string }[];
+  number_of_seasons: number;
+  number_of_episodes: number;
+  episode_run_time: number[];
+  imdb_id?: string;
+  credits?: {
+    cast: TMDBCast[];
+  };
+  videos?: {
+    results: {
+      id: string;
+      key: string;
+      name: string;
+      site: string;
+      type: string;
+    }[];
+  };
+}
+
 // App Settings
 export interface AppSettings {
   theme: 'light' | 'dark';
   language: 'tr' | 'en';
   autoLogin: boolean;
+  rememberMe: boolean;
   parentalControlEnabled: boolean;
   parentalControlPin?: string;
+  blockedCategories?: number[];
+  blockedContentIds?: number[];
+  videoQualityPreference?: 'auto' | 'high' | 'medium' | 'low';
+  subtitleLanguage?: string;
+  audioLanguage?: string;
 }
 
 // Playback History
@@ -179,10 +267,15 @@ export interface PlaybackHistory {
   position: number; // seconds
   duration: number; // seconds
   posterUrl?: string;
+  backdropUrl?: string;
   seasonNumber?: number;
   episodeNumber?: number;
+  episodeTitle?: string;
   lastWatched: string; // ISO date string
   completed: boolean;
+  tmdbId?: number;
+  year?: string;
+  categoryId?: string;
 }
 
 // Favorites
@@ -192,5 +285,27 @@ export interface Favorite {
   name: string;
   streamId: number;
   posterUrl?: string;
+  backdropUrl?: string;
+  poster?: string; // For backward compatibility
   addedAt: string; // ISO date string
+  tmdbId?: number;
+  year?: string;
+  categoryId?: string;
+  genre?: string;
+  rating?: string;
+}
+
+// User Data Store Types
+export interface UserData {
+  favorites: Favorite[];
+  watchHistory: PlaybackHistory[];
+  continueWatching: PlaybackHistory[];
+  recentlyWatched: PlaybackHistory[];
+}
+
+// Search Types
+export interface SearchResult {
+  liveStreams: LiveStream[];
+  movies: Movie[];
+  series: Series[];
 }

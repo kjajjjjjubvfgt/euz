@@ -55,7 +55,7 @@ const LiveTVPlayerPage: React.FC = () => {
   return (
     <PlayerContainer>
       <VideoPlayer
-        url={channelStream.url}
+        url={channelStream as any}
         title={channel.name}
         subtitle={currentProgram}
         poster={channel.stream_icon}

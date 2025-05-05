@@ -29,8 +29,7 @@ useSettingsStore.subscribe(
     if (i18n.language !== state.language) {
       i18n.changeLanguage(state.language);
     }
-  },
-  (state) => state.language
+  }
 );
 
 export default i18n;

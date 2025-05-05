@@ -95,7 +95,7 @@ const HomePage: React.FC = () => {
     <Layout>
       <HomeContainer>
         {featuredContent.length > 0 && (
-          <HeroSlider items={featuredContent} />
+          <HeroSlider items={featuredContent as any} />
         )}
         
         {continueWatching.length > 0 && (
@@ -152,7 +152,7 @@ const HomePage: React.FC = () => {
                       />
                     );
                   }
-                } else if (item.type === 'channel') {
+                } else if (item.type === 'live') {
                   const channel = liveChannels.find(c => c.stream_id === item.id);
                   if (channel) {
                     return (

@@ -54,7 +54,7 @@ const EpisodeCard: React.FC<EpisodeCardProps> = ({
         </EpisodeNumber>
         {episode.info?.duration && (
           <EpisodeDuration>
-            {Math.floor(episode.info.duration / 60)} min
+            {episode.info?.duration ? Math.floor(parseInt(episode.info.duration) / 60) : 0} min
           </EpisodeDuration>
         )}
         {episode.info?.plot && (

@@ -7,7 +7,8 @@ interface AuthState {
   userProfile: UserProfile | null;
   isLoading: boolean;
   error: string | null;
-  login: (server: string, username: string, password: string) => Promise<void>;
+  autoLogin: boolean | (() => Promise<boolean>);
+  login: (server: string, username: string, password: string, rememberMe?: boolean) => Promise<boolean>;
   logout: () => void;
   checkAuth: () => Promise<boolean>;
 }
@@ -17,12 +18,24 @@ const useAuthStore = create<AuthState>((set, get) => ({
   userProfile: null,
   isLoading: false,
   error: null,
+  autoLogin: async () => {
+    return await get().checkAuth();
+  },
   
-  login: async (server: string, username: string, password: string) => {
+  login: async (server: string, username: string, password: string, rememberMe = false) => {
     set({ isLoading: true, error: null });
     try {
       const userProfile = await xtreamService.authenticate(server, username, password);
       set({ isAuthenticated: true, userProfile, isLoading: false });
+      
+      // Save credentials to localStorage if rememberMe is true
+      if (rememberMe) {
+        localStorage.setItem('xtream_credentials', JSON.stringify({ server, username, password }));
+      } else {
+        localStorage.removeItem('xtream_credentials');
+      }
+      
+      return true;
     } catch (error) {
       set({ 
         isAuthenticated: false, 
@@ -30,16 +43,18 @@ const useAuthStore = create<AuthState>((set, get) => ({
         isLoading: false, 
         error: error instanceof Error ? error.message : 'Login failed' 
       });
-      throw error;
+      return false;
     }
   },
   
   logout: () => {
     xtreamService.clearCredentials();
+    localStorage.removeItem('xtream_credentials');
     set({ isAuthenticated: false, userProfile: null, error: null });
   },
   
   checkAuth: async () => {
+    // First check if we're already logged in
     if (xtreamService.isLoggedIn()) {
       set({ isLoading: true, error: null });
       try {
@@ -53,9 +68,27 @@ const useAuthStore = create<AuthState>((set, get) => ({
           isLoading: false, 
           error: error instanceof Error ? error.message : 'Authentication check failed' 
         });
+        // Clear any stored credentials as they might be invalid
+        localStorage.removeItem('xtream_credentials');
         return false;
       }
     }
+    
+    // Try auto login from stored credentials
+    try {
+      const credentialsJson = localStorage.getItem('xtream_credentials');
+      if (credentialsJson) {
+        const credentials = JSON.parse(credentialsJson);
+        if (credentials && credentials.server && credentials.username && credentials.password) {
+          // We have stored credentials, proceed with login
+          return await get().login(credentials.server, credentials.username, credentials.password, true);
+        }
+      }
+    } catch (error) {
+      console.error('Auto login failed:', error);
+      localStorage.removeItem('xtream_credentials');
+    }
+    
     return false;
   }
 }));

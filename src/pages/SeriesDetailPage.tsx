@@ -24,6 +24,8 @@ const SeriesDetailPage: React.FC = () => {
   } = useContentStore();
   const { fetchSeriesDetails, seriesDetails } = useTmdbStore();
   const { addToFavorites, removeFromFavorites, favorites } = useUserDataStore();
+  const addFavorite = addToFavorites;
+  const removeFavorite = removeFromFavorites;
   
   const [seriesData, setSeriesData] = useState<Series | null>(null);
   const [selectedSeason, setSelectedSeason] = useState<string | null>(null);
@@ -72,9 +74,14 @@ const SeriesDetailPage: React.FC = () => {
     if (!seriesData) return;
     
     if (isFavorite) {
-      removeFromFavorites('series', seriesData.series_id);
+      removeFavorite(seriesData.series_id);
     } else {
-      addToFavorites('series', seriesData.series_id);
+      addFavorite({
+        type: 'series',
+        streamId: seriesData.series_id,
+        name: seriesData.name,
+        poster: seriesData.cover || seriesData.backdrop_path
+      });
     }
     
     setIsFavorite(!isFavorite);
@@ -117,7 +124,7 @@ const SeriesDetailPage: React.FC = () => {
     return (
       <VideoPlayerContainer>
         <VideoPlayer
-          url={episodeStream.url}
+          url={episodeStream as any}
           title={seriesData.name}
           subtitle={`S${selectedEpisode.season_number} E${selectedEpisode.episode_num}: ${selectedEpisode.title}`}
           poster={selectedEpisode.info?.movie_image || seriesData.cover}

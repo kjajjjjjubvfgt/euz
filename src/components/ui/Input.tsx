@@ -17,6 +17,7 @@ interface InputProps {
   onBlur?: () => void;
   autoFocus?: boolean;
   onEnter?: () => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -34,6 +35,7 @@ const Input: React.FC<InputProps> = ({
   onBlur,
   autoFocus = false,
   onEnter,
+  onKeyDown,
 }) => {
   const { ref, isFocused } = useFocusable({
     onEnter,
@@ -47,6 +49,9 @@ const Input: React.FC<InputProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && onEnter) {
       onEnter();
+    }
+    if (onKeyDown) {
+      onKeyDown(e);
     }
   };
 

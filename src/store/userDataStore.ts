@@ -1,23 +1,33 @@
 import { create } from 'zustand';
-import { Favorite, PlaybackHistory } from '../types';
+import { Favorite, PlaybackHistory, UserData } from '../types';
 
 interface UserDataState {
   favorites: Favorite[];
   watchHistory: PlaybackHistory[];
   
   // Favorites actions
+  addToFavorites: (favorite: Omit<Favorite, 'id' | 'addedAt'>) => void;
+  removeFromFavorites: (id: number) => void;
   addFavorite: (favorite: Omit<Favorite, 'id' | 'addedAt'>) => void;
   removeFavorite: (id: number) => void;
   isFavorite: (type: 'movie' | 'series' | 'live', streamId: number) => boolean;
+  getFavoritesByType: (type: 'movie' | 'series' | 'live') => Favorite[];
+  toggleFavorite: (favorite: Omit<Favorite, 'id' | 'addedAt'>) => boolean;
   
   // Watch history actions
   addToWatchHistory: (history: Omit<PlaybackHistory, 'id' | 'lastWatched'>) => void;
   updateWatchProgress: (id: number, position: number, duration: number) => void;
   removeFromWatchHistory: (id: number) => void;
   getWatchProgress: (type: 'movie' | 'series' | 'live', streamId: number, seasonNumber?: number, episodeNumber?: number) => PlaybackHistory | undefined;
+  getRecentlyWatched: (limit?: number) => PlaybackHistory[];
+  getContinueWatching: (limit?: number) => PlaybackHistory[];
   
   // Clear user data
   clearUserData: () => void;
+  
+  // Export/Import user data
+  exportUserData: () => UserData;
+  importUserData: (userData: UserData) => void;
 }
 
 // Load data from localStorage
@@ -45,7 +55,7 @@ const useUserDataStore = create<UserDataState>((set, get) => ({
   watchHistory: loadWatchHistory(),
   
   // Favorites methods
-  addFavorite: (favorite) => {
+  addToFavorites: (favorite) => {
     const newFavorite: Favorite = {
       ...favorite,
       id: Date.now(),
@@ -59,7 +69,7 @@ const useUserDataStore = create<UserDataState>((set, get) => ({
     });
   },
   
-  removeFavorite: (id) => {
+  removeFromFavorites: (id) => {
     set(state => {
       const updatedFavorites = state.favorites.filter(fav => fav.id !== id);
       saveFavorites(updatedFavorites);
@@ -67,8 +77,40 @@ const useUserDataStore = create<UserDataState>((set, get) => ({
     });
   },
   
+  // Legacy methods for compatibility
+  addFavorite: (favorite) => {
+    get().addToFavorites(favorite);
+  },
+  
+  removeFavorite: (id) => {
+    get().removeFromFavorites(id);
+  },
+  
   isFavorite: (type, streamId) => {
     return get().favorites.some(fav => fav.type === type && fav.streamId === streamId);
+  },
+  
+  getFavoritesByType: (type) => {
+    return get().favorites.filter(fav => fav.type === type);
+  },
+  
+  toggleFavorite: (favorite) => {
+    const { type, streamId } = favorite;
+    const isFav = get().isFavorite(type, streamId);
+    
+    if (isFav) {
+      // Find the favorite to remove
+      const favToRemove = get().favorites.find(
+        fav => fav.type === type && fav.streamId === streamId
+      );
+      if (favToRemove) {
+        get().removeFromFavorites(favToRemove.id);
+      }
+      return false; // No longer a favorite
+    } else {
+      get().addToFavorites(favorite);
+      return true; // Now a favorite
+    }
   },
   
   // Watch history methods
@@ -151,11 +193,59 @@ const useUserDataStore = create<UserDataState>((set, get) => ({
     );
   },
   
+  getRecentlyWatched: (limit = 20) => {
+    // Return the most recently watched items, sorted by lastWatched
+    return [...get().watchHistory]
+      .sort((a, b) => new Date(b.lastWatched).getTime() - new Date(a.lastWatched).getTime())
+      .slice(0, limit);
+  },
+  
+  getContinueWatching: (limit = 10) => {
+    // Return items that are not completed and have been watched recently
+    return [...get().watchHistory]
+      .filter(item => !item.completed && (item.position / item.duration) > 0.05) // More than 5% watched but not completed
+      .sort((a, b) => new Date(b.lastWatched).getTime() - new Date(a.lastWatched).getTime())
+      .slice(0, limit);
+  },
+  
   // Clear all user data
   clearUserData: () => {
     localStorage.removeItem('favorites');
     localStorage.removeItem('watch_history');
     set({ favorites: [], watchHistory: [] });
+  },
+  
+  // Export user data (for backup)
+  exportUserData: (): UserData => {
+    const { favorites, watchHistory } = get();
+    
+    // Get only non-completed items for continue watching
+    const continueWatching = watchHistory
+      .filter(item => !item.completed && (item.position / item.duration) > 0.05)
+      .sort((a, b) => new Date(b.lastWatched).getTime() - new Date(a.lastWatched).getTime());
+    
+    // Get recently watched items
+    const recentlyWatched = [...watchHistory]
+      .sort((a, b) => new Date(b.lastWatched).getTime() - new Date(a.lastWatched).getTime())
+      .slice(0, 20);
+    
+    return {
+      favorites,
+      watchHistory,
+      continueWatching,
+      recentlyWatched
+    };
+  },
+  
+  // Import user data (from backup)
+  importUserData: (userData: UserData) => {
+    set({
+      favorites: userData.favorites || [],
+      watchHistory: userData.watchHistory || []
+    });
+    
+    saveFavorites(userData.favorites || []);
+    saveWatchHistory(userData.watchHistory || []);
   }
 }));
 

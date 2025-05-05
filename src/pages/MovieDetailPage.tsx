@@ -16,6 +16,8 @@ const MovieDetailPage: React.FC = () => {
   const { movies, fetchMovieStream, movieStream, isLoading } = useContentStore();
   const { fetchMovieDetails, movieDetails } = useTmdbStore();
   const { addToFavorites, removeFromFavorites, favorites } = useUserDataStore();
+  const addFavorite = addToFavorites;
+  const removeFavorite = removeFromFavorites;
   
   const [movie, setMovie] = useState<Movie | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -60,9 +62,14 @@ const MovieDetailPage: React.FC = () => {
     if (!movie) return;
     
     if (isFavorite) {
-      removeFromFavorites('movie', movie.stream_id);
+      removeFavorite(movie.stream_id);
     } else {
-      addToFavorites('movie', movie.stream_id);
+      addFavorite({
+        type: 'movie',
+        streamId: movie.stream_id,
+        name: movie.name,
+        poster: movie.stream_icon
+      });
     }
     
     setIsFavorite(!isFavorite);
@@ -97,7 +104,7 @@ const MovieDetailPage: React.FC = () => {
     return (
       <VideoPlayerContainer>
         <VideoPlayer
-          url={movieStream.url}
+          url={movieStream as any}
           title={movie.name}
           poster={movie.cover || movie.stream_icon}
           onBack={handleBack}

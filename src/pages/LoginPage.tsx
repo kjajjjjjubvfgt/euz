@@ -36,8 +36,8 @@ const LoginPage: React.FC = () => {
         
         <LoginForm>
           <Input
-            label={t('login.serverUrl')}
-            placeholder={t('login.serverUrlPlaceholder')}
+            label={t('auth.server')}
+            placeholder={t('auth.serverPlaceholder')}
             value={serverUrl}
             onChange={e => setServerUrl(e as any)}
             onKeyDown={handleKeyDown}
@@ -45,16 +45,16 @@ const LoginPage: React.FC = () => {
           />
           
           <Input
-            label={t('login.username')}
-            placeholder={t('login.usernamePlaceholder')}
+            label={t('auth.username')}
+            placeholder={t('auth.usernamePlaceholder')}
             value={username}
             onChange={e => setUsername(e as any)}
             onKeyDown={handleKeyDown}
           />
           
           <Input
-            label={t('login.password')}
-            placeholder={t('login.passwordPlaceholder')}
+            label={t('auth.password')}
+            placeholder={t('auth.passwordPlaceholder')}
             type="password"
             value={password}
             onChange={e => setPassword(e as any)}
@@ -69,7 +69,7 @@ const LoginPage: React.FC = () => {
               id="remember-me"
             />
             <CheckboxLabel htmlFor="remember-me">
-              {t('login.rememberMe')}
+              {t('auth.rememberMe')}
             </CheckboxLabel>
           </RememberMeContainer>
           
@@ -81,7 +81,7 @@ const LoginPage: React.FC = () => {
             onClick={handleLogin}
             disabled={isLoading || !serverUrl || !username || !password}
           >
-            {isLoading ? <Loading size="small" color="white" /> : t('login.signIn')}
+            {isLoading ? <Loading size="small" color="white" /> : t('auth.login')}
           </LoginButton>
         </LoginForm>
       </LoginBox>

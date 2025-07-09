@@ -59,7 +59,6 @@ const Input: React.FC<InputProps> = ({
     <InputContainer $fullWidth={fullWidth} className={className}>
       {label && <Label>{label}</Label>}
       
-      <InputWrapper isFocused={isFocused} hasError={!!error} disabled={disabled}>
       <InputWrapper isFocused={isFocused} $hasError={!!error} disabled={disabled}>
         {icon && <IconWrapper>{icon}</IconWrapper>}
         

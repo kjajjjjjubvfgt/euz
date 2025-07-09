@@ -60,6 +60,7 @@ const Input: React.FC<InputProps> = ({
       {label && <Label>{label}</Label>}
       
       <InputWrapper isFocused={isFocused} hasError={!!error} disabled={disabled}>
+      <InputWrapper isFocused={isFocused} $hasError={!!error} disabled={disabled}>
         {icon && <IconWrapper>{icon}</IconWrapper>}
         
         <StyledInput
@@ -101,7 +102,7 @@ const Label = styled.label`
 
 interface InputWrapperProps {
   isFocused: boolean;
-  hasError: boolean;
+  $hasError: boolean;
   disabled: boolean;
 }
 
@@ -114,7 +115,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
   transition: all 0.2s ease;
   
   ${props => {
-    if (props.hasError) {
+    if (props.$hasError) {
       return css`
         border-color: var(--color-error);
       `;

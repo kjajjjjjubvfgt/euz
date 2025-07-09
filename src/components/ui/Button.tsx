@@ -40,7 +40,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={!disabled ? onClick : undefined}
       variant={variant}
       size={size}
-      fullWidth={fullWidth}
+      $fullWidth={fullWidth}
       disabled={disabled}
       isFocused={isFocused}
       className={className}
@@ -173,7 +173,7 @@ const getSizeStyles = (size: string) => {
 interface StyledButtonProps {
   variant: string;
   size: string;
-  fullWidth: boolean;
+  $fullWidth: boolean;
   disabled: boolean;
   isFocused: boolean;
 }
@@ -186,7 +186,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: ${props => (props.fullWidth ? '100%' : 'auto')};
+  width: ${props => (props.$fullWidth ? '100%' : 'auto')};
   
   ${props => getSizeStyles(props.size)}
   ${props => getVariantStyles(props.variant, props.isFocused)}

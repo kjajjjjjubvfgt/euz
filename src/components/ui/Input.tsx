@@ -56,7 +56,7 @@ const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <InputContainer fullWidth={fullWidth} className={className}>
+    <InputContainer $fullWidth={fullWidth} className={className}>
       {label && <Label>{label}</Label>}
       
       <InputWrapper isFocused={isFocused} hasError={!!error} disabled={disabled}>
@@ -82,13 +82,13 @@ const Input: React.FC<InputProps> = ({
 };
 
 interface InputContainerProps {
-  fullWidth: boolean;
+  $fullWidth: boolean;
 }
 
 const InputContainer = styled.div<InputContainerProps>`
   display: flex;
   flex-direction: column;
-  width: ${props => (props.fullWidth ? '100%' : '300px')};
+  width: ${props => (props.$fullWidth ? '100%' : '300px')};
   margin-bottom: 16px;
 `;
 

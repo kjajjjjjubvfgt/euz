@@ -26,22 +26,22 @@ i18n
 // to avoid circular dependency issues
 setTimeout(() => {
   // Import here to avoid circular dependency
-  const { useSettingsStore } = require('../store');
-  
-  // Set initial language from settings if available
-  const initialLang = useSettingsStore.getState().language;
-  if (initialLang && i18n.language !== initialLang) {
-    i18n.changeLanguage(initialLang);
-  }
-  
-  // Listen for language changes in the settings store
-  useSettingsStore.subscribe(
-    (state) => {
-      if (i18n.language !== state.language) {
-        i18n.changeLanguage(state.language);
-      }
+  import('../store').then(({ useSettingsStore }) => {
+    // Set initial language from settings if available
+    const initialLang = useSettingsStore.getState().language;
+    if (initialLang && i18n.language !== initialLang) {
+      i18n.changeLanguage(initialLang);
     }
-  );
+  
+    // Listen for language changes in the settings store
+    useSettingsStore.subscribe(
+      (state) => {
+        if (i18n.language !== state.language) {
+          i18n.changeLanguage(state.language);
+        }
+      }
+    );
+  });
 }, 0);
 
 export default i18n;
